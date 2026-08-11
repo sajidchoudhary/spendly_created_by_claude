@@ -3,7 +3,7 @@ import re
 from flask import Flask, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from database.db import create_user, get_db, get_user_by_email, init_db, seed_db
+from database.db import create_user, get_db, get_user_by_email, get_user_by_id, init_db, seed_db
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-key-change-me"  # hardcoded for this learning project
@@ -85,14 +85,19 @@ def logout():
     return redirect(url_for("login"))
 
 
+@app.route("/profile")
+def profile():
+    user_id = session.get("user_id")
+    if user_id is None:
+        return redirect(url_for("login"))
+
+    user = get_user_by_id(user_id)
+    return render_template("profile.html", user=user)
+
+
 # ------------------------------------------------------------------ #
 # Placeholder routes — students will implement these                  #
 # ------------------------------------------------------------------ #
-
-@app.route("/profile")
-def profile():
-    return "Profile page — coming in Step 4"
-
 
 @app.route("/expenses/add")
 def add_expense():
