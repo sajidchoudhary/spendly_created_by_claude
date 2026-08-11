@@ -3,7 +3,7 @@ import re
 from flask import Flask, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from database.db import create_user, get_db, get_user_by_email, get_user_by_id, init_db, seed_db
+from database.db import create_user, get_db, get_user_by_email, init_db, seed_db
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-key-change-me"  # hardcoded for this learning project
@@ -87,12 +87,36 @@ def logout():
 
 @app.route("/profile")
 def profile():
-    user_id = session.get("user_id")
-    if user_id is None:
+    if session.get("user_id") is None:
         return redirect(url_for("login"))
 
-    user = get_user_by_id(user_id)
-    return render_template("profile.html", user=user)
+    user = {
+        "name": "Nitish Kumar",
+        "initials": "NK",
+        "email": "nitish@example.com",
+        "member_since": "March 2025",
+    }
+    stats = [
+        {"label": "Total spent", "value": "₹18,240", "note": "this month"},
+        {"label": "Transactions", "value": "34", "note": "logged"},
+        {"label": "Top category", "value": "Food", "note": "₹6,200 spent"},
+    ]
+    transactions = [
+        {"date": "12 Aug", "description": "Grocery run", "category": "Food", "amount": "₹1,240"},
+        {"date": "10 Aug", "description": "Electricity bill", "category": "Bills", "amount": "₹2,100"},
+        {"date": "09 Aug", "description": "Cab to airport", "category": "Transport", "amount": "₹640"},
+        {"date": "07 Aug", "description": "Movie night", "category": "Entertainment", "amount": "₹450"},
+        {"date": "05 Aug", "description": "Pharmacy", "category": "Health", "amount": "₹380"},
+    ]
+    categories = [
+        {"name": "Food", "amount": "₹6,200", "bar_class": "profile-bar-1"},
+        {"name": "Bills", "amount": "₹4,300", "bar_class": "profile-bar-2"},
+        {"name": "Transport", "amount": "₹2,860", "bar_class": "profile-bar-3"},
+        {"name": "Entertainment", "amount": "₹1,540", "bar_class": "profile-bar-4"},
+    ]
+    return render_template(
+        "profile.html", user=user, stats=stats, transactions=transactions, categories=categories,
+    )
 
 
 # ------------------------------------------------------------------ #
