@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Your Profile — Spendly{% endblock %}
+
+{% block content %}
+
+<section class="profile-section">
+    <div class="profile-container">
+
+        <div class="profile-card profile-identity-card">
+            <div class="profile-avatar">{{ user.initials }}</div>
+            <div>
+                <h1 class="profile-name">{{ user.name }}</h1>
+                <p class="profile-email">{{ user.email }}</p>
+                <p class="profile-member-since">Member since {{ user.member_since }}</p>
+            </div>
+        </div>
+
+        <div class="mock-stats-row">
+            {% for stat in stats %}
+            <div class="mock-stat">
+                <span class="mock-stat-label">{{ stat.label }}</span>
+                <span class="mock-stat-value">{{ stat.value }}</span>
+                <span class="mock-stat-delta mock-stat-neutral">{{ stat.note }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="profile-card">
+            <h2 class="profile-card-title">Recent transactions</h2>
+            <table class="transaction-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in transactions %}
+                    <tr>
+                        <td>{{ t.date }}</td>
+                        <td>{{ t.description }}</td>
+                        <td><span class="category-badge {{ 'cat-' + t.category|lower }}">{{ t.category }}</span></td>
+                        <td>{{ t.amount }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mock-bars-card">
+            <h2 class="profile-card-title">Spending by category</h2>
+            {% for c in categories %}
+            <div class="mock-bar-row mock-bar-row--profile">
+                <span class="mock-cat">{{ c.name }}</span>
+                <div class="mock-bar-track">
+                    <div class="mock-bar {{ c.bar_class }}"></div>
+                </div>
+                <span class="mock-bar-amount">{{ c.amount }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

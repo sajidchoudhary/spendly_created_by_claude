@@ -85,14 +85,43 @@ def logout():
     return redirect(url_for("login"))
 
 
+@app.route("/profile")
+def profile():
+    if session.get("user_id") is None:
+        return redirect(url_for("login"))
+
+    user = {
+        "name": "Nitish Kumar",
+        "initials": "NK",
+        "email": "nitish@example.com",
+        "member_since": "March 2025",
+    }
+    stats = [
+        {"label": "Total spent", "value": "₹18,240", "note": "this month"},
+        {"label": "Transactions", "value": "34", "note": "logged"},
+        {"label": "Top category", "value": "Food", "note": "₹6,200 spent"},
+    ]
+    transactions = [
+        {"date": "12 Aug", "description": "Grocery run", "category": "Food", "amount": "₹1,240"},
+        {"date": "10 Aug", "description": "Electricity bill", "category": "Bills", "amount": "₹2,100"},
+        {"date": "09 Aug", "description": "Cab to airport", "category": "Transport", "amount": "₹640"},
+        {"date": "07 Aug", "description": "Movie night", "category": "Entertainment", "amount": "₹450"},
+        {"date": "05 Aug", "description": "Pharmacy", "category": "Health", "amount": "₹380"},
+    ]
+    categories = [
+        {"name": "Food", "amount": "₹6,200", "bar_class": "profile-bar-1"},
+        {"name": "Bills", "amount": "₹4,300", "bar_class": "profile-bar-2"},
+        {"name": "Transport", "amount": "₹2,860", "bar_class": "profile-bar-3"},
+        {"name": "Entertainment", "amount": "₹1,540", "bar_class": "profile-bar-4"},
+    ]
+    return render_template(
+        "profile.html", user=user, stats=stats, transactions=transactions, categories=categories,
+    )
+
+
 # ------------------------------------------------------------------ #
 # Placeholder routes — students will implement these                  #
 # ------------------------------------------------------------------ #
-
-@app.route("/profile")
-def profile():
-    return "Profile page — coming in Step 4"
-
 
 @app.route("/expenses/add")
 def add_expense():

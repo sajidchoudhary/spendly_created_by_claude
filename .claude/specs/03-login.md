@@ -17,10 +17,13 @@ No schema changes and no new data-access functions. `get_user_by_email(email)` (
 
 ## Templates
 - **Create:** none
-- **Modify:** `templates/login.html` — no structural changes required; it already renders `{{ error }}` when present and posts `email`, `password` to `/login`. Only touch this file if server-side validation needs a field-specific error class (keep changes minimal).
+- **Modify:**
+  - `templates/login.html` — no structural changes required; it already renders `{{ error }}` when present and posts `email`, `password` to `/login`. Only touch this file if server-side validation needs a field-specific error class (keep changes minimal).
+  - `templates/base.html` — nav becomes session-aware: when `session.user_id` is set, show a single "Logout" link (`{{ url_for('logout') }}`) in place of "Sign in"/"Get started"; when logged out, show "Sign in"/"Get started" as before. Uses Flask's built-in `session` Jinja global — no new route or context processor needed.
 
 ## Files to change
 - `app.py` — replace the `/login` GET-only route with GET/POST handling (lookup by email, password verification, session creation, redirect to `/profile`); replace the `/logout` placeholder with a real handler (`session.clear()`, redirect to `/login`)
+- `templates/base.html` — wrap the nav's auth links in `{% if session.get('user_id') %}...{% else %}...{% endif %}` per the Templates section above
 
 ## Files to create
 None.
@@ -47,4 +50,6 @@ No new dependencies. Uses `flask.session` (built in) and `werkzeug.security.chec
 - [ ] Submitting with a correct email but wrong password re-renders `login.html` with the same generic error (no hint as to which field was wrong)
 - [ ] Visiting `/logout` while logged in clears the session and redirects to `/login`
 - [ ] After `/logout`, the session no longer carries `user_id` (a fresh session)
+- [ ] While logged in, the nav on any page shows a "Logout" link instead of "Sign in"/"Get started"
+- [ ] While logged out, the nav shows "Sign in"/"Get started" as before (no "Logout" link)
 - [ ] Restarting the app (`python app.py`) still works without errors
