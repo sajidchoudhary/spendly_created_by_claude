@@ -102,3 +102,24 @@ def create_user(name, email, password_hash):
     user_id = cursor.lastrowid
     conn.close()
     return user_id
+
+
+def get_expenses_by_user(user_id):
+    conn = get_db()
+    expenses = conn.execute(
+        "SELECT * FROM expenses WHERE user_id = ? ORDER BY date DESC, id DESC",
+        (user_id,),
+    ).fetchall()
+    conn.close()
+    return expenses
+
+
+def get_category_totals(user_id):
+    conn = get_db()
+    totals = conn.execute(
+        "SELECT category, SUM(amount) AS total FROM expenses WHERE user_id = ? "
+        "GROUP BY category ORDER BY total DESC",
+        (user_id,),
+    ).fetchall()
+    conn.close()
+    return totals
