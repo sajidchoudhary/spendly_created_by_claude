@@ -1,0 +1,41 @@
+/* ------------------------------------------------------------------ */
+/* Date filter bar                                                     */
+/* ------------------------------------------------------------------ */
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.filter-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.filter-preset.active {
+    background: var(--accent);
+    color: var(--paper);
+    border-color: var(--accent);
+}
+
+.filter-custom-range {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.filter-custom-range .form-group {
+    margin-bottom: 0;
+}
+
+.filter-custom-range .form-input {
+    width: auto;
+}
+
+.filter-custom-range.active .form-input {
+    border-color: var(--accent);
+}
